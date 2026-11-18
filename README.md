@@ -10,7 +10,7 @@ A Chrome extension for GitLab merge request diffs. It marks every file whose pat
 
 ## Package / publish
 
-- `./scripts/package.sh` builds `dist/gitlab-mr-test-hider-<version>.zip` for the Chrome Web Store. Bump `version` in `manifest.json` for each upload.
+- `./scripts/package.sh` builds `dist/gitlab-mr-test-hider-<version>.zip` (send this to teammates: unzip, then Load unpacked; see INSTALL.txt) and `dist/gitlab-mr-test-hider-<version>-store.zip` (upload this to the Chrome Web Store). Bump `version` in `manifest.json` for each upload.
 - `scripts/make_icons.py` regenerates `icons/`.
 - Store listing and privacy-tab text: [STORE.md](STORE.md).
 
