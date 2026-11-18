@@ -8,6 +8,12 @@ A Chrome extension for GitLab merge request diffs. It marks every file whose pat
 2. Click **Load unpacked** and select this folder.
 3. Open an MR's **Changes** tab, for example `https://gitlab.com/<group>/<project>/-/merge_requests/<iid>/diffs`.
 
+## Package / publish
+
+- `./scripts/package.sh` builds `dist/gitlab-mr-test-hider-<version>.zip` for the Chrome Web Store. Bump `version` in `manifest.json` for each upload.
+- `scripts/make_icons.py` regenerates `icons/`.
+- Store listing and privacy-tab text: [STORE.md](STORE.md).
+
 ## Use
 
 - Click the **Hide tests** button in the bottom-right corner of the MR page, or
@@ -32,5 +38,5 @@ Because this is the same state GitLab's own checkbox writes, unticking a file by
 
 ## Limits
 
-- Only `https://gitlab.com` is enabled. For a self-hosted GitLab, add its host to `host_permissions` and `content_scripts.matches` in `manifest.json`.
+- Only `https://gitlab.com` is enabled. For a self-hosted GitLab, add its host to `content_scripts.matches` in `manifest.json`.
 - Collapsing folders relies on GitLab's file-tree markup (`.file-row.folder[aria-expanded]` in `[data-testid="file-tree-container"]`). If GitLab changes it, marking files as Viewed keeps working, but folders may stay open. Check the console for `[mr-test-hider]` messages.
