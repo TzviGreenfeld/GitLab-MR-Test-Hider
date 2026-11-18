@@ -6,5 +6,9 @@ version=$(python3 -c 'import json; print(json.load(open("manifest.json"))["versi
 mkdir -p dist
 out="dist/gitlab-mr-test-hider-${version}.zip"
 rm -f "$out"
-zip -q -r "$out" manifest.json content.js content.css popup.html popup.js icons
+tmp=$(mktemp -d)
+mkdir "$tmp/gitlab-mr-test-hider"
+cp -r INSTALL.txt manifest.json content.js content.css popup.html popup.js icons "$tmp/gitlab-mr-test-hider/"
+(cd "$tmp" && zip -q -r - gitlab-mr-test-hider) > "$out"
+rm -rf "$tmp"
 echo "$out"

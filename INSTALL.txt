@@ -1,0 +1,16 @@
+GitLab MR Test Hider - install
+==============================
+
+1. Unzip this file to a folder you will keep (e.g. Documents/gitlab-mr-test-hider).
+   Chrome loads the extension from that folder, so don't delete it.
+2. In Chrome, open:  chrome://extensions
+3. Turn on "Developer mode" (top-right switch).
+4. Click "Load unpacked" and select the unzipped folder
+   (the one that contains manifest.json).
+5. Optional: click the puzzle-piece icon in the toolbar and pin "GitLab MR Test Hider".
+
+Use: open a merge request's Changes tab on gitlab.com and click "Hide tests"
+(bottom-right), or use the toolbar popup to change the patterns (default *test*).
+
+Update: unzip the new version over the same folder, then click the reload
+icon on the extension's card in chrome://extensions.
