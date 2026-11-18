@@ -107,9 +107,13 @@
     return null;
   }
 
-  // A folder row's title is the folder's full path (file_row.vue textForTitle); fall back to its name.
+  // A folder row's title is its first file's parent path ("a/b/tests/"), which only exists when
+  // the folder directly holds a file. Otherwise use the row's label, which is the folder name,
+  // or "a/b" when GitLab merged a chain of single-child folders into one row.
   function folderPath(row) {
-    return row.getAttribute('title') || row.getAttribute('aria-label') || row.textContent.trim();
+    const label =
+      row.getAttribute('title') || row.getAttribute('aria-label') || row.textContent.trim();
+    return label.replace(/\/+$/, '');
   }
 
   function collapseVisibleFolders(matches) {
@@ -119,9 +123,8 @@
     for (const row of rows) {
       const path = folderPath(row);
       if (!matches(path)) continue;
-      // Collapse only the outermost matching folder; nested ones disappear with it.
-      const parent = path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : '';
-      if (parent && matches(parent)) continue;
+      // Rows are walked top-down, so an outer matching folder is collapsed (hiding its
+      // children) before any matching folder inside it is reached.
       LOG('collapsing', path);
       row.click();
       return true; // the virtual list re-renders after a click; rescan
