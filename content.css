@@ -1,0 +1,20 @@
+#mr-test-hider-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10000;
+  padding: 6px 12px;
+  border: 1px solid #a4a3a8;
+  border-radius: 6px;
+  background: #fff;
+  color: #333238;
+  font: 600 13px/1.4 system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+#mr-test-hider-btn:hover { background: #ececef; }
+#mr-test-hider-btn:disabled { opacity: 0.7; cursor: default; }
+@media (prefers-color-scheme: dark) {
+  #mr-test-hider-btn { background: #333238; color: #ececef; border-color: #626168; }
+  #mr-test-hider-btn:hover { background: #434248; }
+}

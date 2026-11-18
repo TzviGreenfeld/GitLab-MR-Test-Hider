@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "GitLab MR Test Hider",
+  "version": "0.1.0",
+  "description": "Mark files matching a pattern (e.g. *test*) as Viewed in a GitLab merge request and collapse their folders in the file tree.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://gitlab.com/*"],
+  "action": {
+    "default_title": "GitLab MR Test Hider",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://gitlab.com/*/-/merge_requests/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

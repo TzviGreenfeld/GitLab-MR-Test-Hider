@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { width: 300px; margin: 0; padding: 12px; font: 13px/1.4 system-ui, sans-serif; color: #333238; }
+      h1 { font-size: 14px; margin: 0 0 8px; }
+      label { display: block; margin: 6px 0; }
+      textarea { width: 100%; box-sizing: border-box; font-family: monospace; }
+      .row { display: flex; gap: 6px; margin-top: 10px; }
+      button { flex: 1; padding: 6px; cursor: pointer; }
+      #status { margin-top: 8px; min-height: 1.4em; color: #626168; }
+      small { color: #737278; }
+    </style>
+  </head>
+  <body>
+    <h1>GitLab MR Test Hider</h1>
+    <label>
+      Patterns (glob, one per line or comma separated)
+      <textarea id="patterns" rows="3"></textarea>
+      <small><code>*</code> matches anything, including <code>/</code>. Matched against the full file path.</small>
+    </label>
+    <label><input type="checkbox" id="markViewed" checked /> Mark matching files as Viewed</label>
+    <label><input type="checkbox" id="collapse" checked /> Collapse matching folders in the file tree</label>
+    <label><input type="checkbox" id="caseSensitive" /> Case sensitive</label>
+    <label><input type="checkbox" id="showButton" /> Show "Hide tests" button on MR pages</label>
+    <label><input type="checkbox" id="autoRun" /> Run automatically when an MR diff opens</label>
+    <div class="row">
+      <button id="hide">Hide matching</button>
+      <button id="unhide">Unmark Viewed</button>
+    </div>
+    <div id="status"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
