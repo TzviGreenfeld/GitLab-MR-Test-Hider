@@ -32,7 +32,7 @@ GitLab keeps the per-file "Viewed" checkbox state in the browser only, in
 1. The extension fetches `…/merge_requests/<iid>/diffs_metadata.json` to get every changed file's path and `code_review_id`.
 2. It adds the IDs of the matching files to that localStorage entry.
 3. GitLab reads that entry only when the page loads, so the extension reloads the page.
-4. After the reload, it walks the file tree and collapses the outermost expanded folders whose path matches.
+4. After the reload, it walks the file tree and collapses the expanded folders whose path (or, when GitLab does not show the path, name) matches.
 
 Because this is the same state GitLab's own checkbox writes, unticking a file by hand keeps working. Like GitLab's own Viewed marks, it is stored in this browser only.
 
