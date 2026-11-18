@@ -122,6 +122,7 @@
       // Collapse only the outermost matching folder; nested ones disappear with it.
       const parent = path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : '';
       if (parent && matches(parent)) continue;
+      LOG('collapsing', path);
       row.click();
       return true; // the virtual list re-renders after a click; rescan
     }
@@ -137,24 +138,65 @@
     await waitFor('[data-testid="file-tree-container"] .file-row');
     const scroller =
       container.querySelector('[data-testid="tree-list-scroll"]') || container;
+    const pageScroll = window.scrollY;
     let collapsed = 0;
-    // The tree is virtualised (only visible rows exist), so walk it top to bottom.
-    scroller.scrollTop = 0;
-    await sleep(100);
+    let lastKey = null;
+    let stuck = 0;
+    // The tree is virtualised: only rows near the visible area exist in the DOM.
+    // Walk it by scrolling the bottom-most rendered row into view. That works no matter
+    // which element actually scrolls (the list, the sidebar or the page).
+    scrollTreeToTop(scroller);
+    await sleep(150);
     for (let guard = 0; guard < 2000; guard += 1) {
       if (collapseVisibleFolders(matches)) {
         collapsed += 1;
-        await sleep(60);
+        stuck = 0;
+        await sleep(80);
         continue;
       }
-      const prev = scroller.scrollTop;
-      scroller.scrollTop = prev + Math.max(scroller.clientHeight - 40, 100);
-      await sleep(80);
-      if (scroller.scrollTop === prev) break;
+      const last = bottomRow(container);
+      if (!last) break;
+      const key = rowKey(last);
+      if (key === lastKey) {
+        stuck += 1;
+        if (stuck >= 3) break; // nothing new rendered after several tries: reached the end
+      } else {
+        stuck = 0;
+      }
+      lastKey = key;
+      last.scrollIntoView({ block: 'start', behavior: 'instant' });
+      scroller.dispatchEvent(new Event('scroll'));
+      await sleep(150);
     }
-    scroller.scrollTop = 0;
+    scrollTreeToTop(scroller);
+    window.scrollTo({ top: pageScroll, behavior: 'instant' });
     LOG(`collapsed ${collapsed} folders`);
     return collapsed;
+  }
+
+  function scrollTreeToTop(scroller) {
+    for (let el = scroller; el && el !== document.body; el = el.parentElement) {
+      if (el.scrollTop) el.scrollTop = 0;
+    }
+  }
+
+  // Rendered rows are recycled and positioned with transforms, so DOM order is not visual order.
+  function bottomRow(container) {
+    let best = null;
+    let bestTop = -Infinity;
+    for (const row of container.querySelectorAll('.file-row')) {
+      const { top, height } = row.getBoundingClientRect();
+      if (height > 0 && top > bestTop) {
+        best = row;
+        bestTop = top;
+      }
+    }
+    return best;
+  }
+
+  function rowKey(row) {
+    const holder = row.closest('[data-file-row]');
+    return `${holder ? holder.getAttribute('data-file-row') : ''}|${folderPath(row)}`;
   }
 
   // ---------- actions ----------
